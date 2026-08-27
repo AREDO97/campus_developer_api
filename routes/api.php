@@ -1,36 +1,41 @@
 <?php
 
+use App\Http\Controllers\api\Aicontroller;
 use App\Http\Controllers\api\CommentsController;
 use App\Http\Controllers\api\EventsController;
 use App\Http\Controllers\api\LikesController;
 use App\Http\Controllers\api\ProjectController;
+use App\Http\Controllers\api\SettingsController;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // register user
-Route::post('/register',[AuthController::class,'register'])->middleware('throttle:3,1');
+Route::post('/register',[AuthController::class,'register'])->middleware('throttle:3,1')
+->name('register');
 // login user
-Route::post('/login',[AuthController::class,'login'])->middleware('throttle:3,1');
+Route::post('/login',[AuthController::class,'login'])->middleware('throttle:3,1')
+->name('login');
 // log out endpoint
-Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum');
+Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctum')
+->name('logout');
 
 // user management
-Route::get('/user/{user}',[UserController::class,'oneUser']);
+Route::get('/user/{user}',[UserController::class,'oneUser'])->name('view single user');
 // update
-Route::post('/users/update/{user}',[UserController::class,'update']);
+Route::post('/users/update/{user}',[UserController::class,'update'])->name('update user info');
 // admin delete and update role
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
      // all users
-    Route::get('/users',[UserController::class,'index']);
-    Route::post('/users/delete/{user}', [UserController::class, 'softDelete']);
-    Route::post('/users/create_admin/{user}', [UserController::class, 'makeAdmin']);
-    Route::post('/users/demote_admin/{user}', [UserController::class, 'demoteAdmin']);
+    Route::get('/users',[UserController::class,'index'])->name('view users');
+    Route::post('/users/delete/{user}', [UserController::class, 'softDelete'])->name('suspend user');
+    Route::post('/users/create_admin/{user}', [UserController::class, 'makeAdmin'])->name('make admin');
+    Route::post('/users/demote_admin/{user}', [UserController::class, 'demoteAdmin'])->name('demote admin');
     //viewSuspended
-    Route::get('/users/suspended', [UserController::class, 'viewSuspended']);
+    Route::get('/users/suspended', [UserController::class, 'viewSuspended'])->name('suspended users');
     // unsuspend user
-     Route::post('/user/unsuspend/{user}', [UserController::class, 'unsuspend']);
+     Route::post('/user/unsuspend/{user}', [UserController::class, 'unsuspend'])->name('unsuspend user');
     
 });
 
@@ -81,4 +86,24 @@ Route::delete('/event/{event}/delete',[EventsController::class,'destroy'])->name
 });
 
 // view upcoming events
-Route::get('/events',[EventsController::class,'index']);
+Route::get('/events',[EventsController::class,'index'])->name('view events');
+
+// settings controller
+
+Route::middleware(['auth:sanctum'])->group(function () {
+// updatePassword
+Route::post('/password/update',[SettingsController::class,'updatePassword'])
+->name('update password');
+
+// update username and email  updateUserInfo
+Route::post('/username/update',[SettingsController::class,'updateUserInfo'])
+->name('update name or email');
+
+// delete account
+Route::post('/deleteAccount',[SettingsController::class,'deleteAccount'])
+->name('delete account');
+
+});
+
+// ai routes 
+Route::post('/ai/chat',[AiController::class,'chat'])->name('ai chat');
