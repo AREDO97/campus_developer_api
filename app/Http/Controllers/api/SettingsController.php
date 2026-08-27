@@ -68,4 +68,9 @@ class SettingsController extends Controller
             'message'=>'Account deleted succesifully'
         ]);
     }
+    // up
+    public function upcoming()
+    {
+        
+    }
 }
