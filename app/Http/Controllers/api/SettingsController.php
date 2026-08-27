@@ -71,6 +71,6 @@ class SettingsController extends Controller
     // up
     public function upcoming()
     {
-        
+        return "hello";
     }
 }
