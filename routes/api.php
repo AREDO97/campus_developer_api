@@ -56,9 +56,9 @@ Route::delete('/project/{project}/delete',[ProjectController::class,'destroy'])-
 
 Route::middleware(['auth:sanctum'])->group(function () {
     // like a project
-Route::post('project/{project}/like',[LikesController::class,'create']);
+Route::post('project/{project}/like',[LikesController::class,'create'])->name('like project');
     // likes count
-Route::get('/project/{project}/likes/count',[LikesController::class,'projectLikes']);
+Route::get('/project/{project}/likes/count',[LikesController::class,'projectLikes'])->name('project likes');
 });
 
 // comment maanagement
