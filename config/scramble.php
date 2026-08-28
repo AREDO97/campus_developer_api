@@ -60,10 +60,12 @@ return [
     ],
 
     /*
-     * Dynamically pulls the server URL based on the environment (Localhost or Render).
+     * Explicit API servers list.
+     * Allows testing both local development and live Render deployments directly from the UI.
      */
     'servers' => [
-        'Current Environment' => env('APP_URL', 'http://localhost:8000') . '/api',
+        'Render (Production)' => 'https://campus-developer-api.onrender.com/api',
+        'Local (Development)' => env('APP_URL', 'http://localhost:8000') . '/api',
     ],
 
     'enum_cases_description_strategy' => 'description',
@@ -79,7 +81,5 @@ return [
 
     'extensions' => [],
 
-// config/scramble.php
-
-'security_strategy' => \Dedoc\Scramble\SecurityDocumentation\MiddlewareAuthSecurityStrategy::class,
+    'security_strategy' => \Dedoc\Scramble\SecurityDocumentation\MiddlewareAuthSecurityStrategy::class,
 ];
