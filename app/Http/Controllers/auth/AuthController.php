@@ -7,7 +7,7 @@ use App\Mail\WelcomeEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use App\Models\AuditLog;
+use App\Models\Profile;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -31,13 +31,24 @@ public function register(Request $request)
 
 
     // Token & Audit Log
-    $token = $user->createToken('auth-token')->plainTextToken;
+    $token = $user->createToken('auth-token');
 
+// create profile 
 
+ $profile=Profile::create([
+            'user_id'=>$user->id,
+            'course'=>"Computer Science",
+            'profile_image'=>"images/profile.webp",
+            'year_of_study'=>null,
+            'hobbies'=>null,
+            'phone'=>"+256 760000000"
+        ]);
+        // response
     return response()->json([
         'message' => 'Account created successfully',
         'user'    => $user,
-        'token'   => $token
+        'token'   => $token,
+        'profile' =>$profile
     ], 201);
 }
     // login

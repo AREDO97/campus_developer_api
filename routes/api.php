@@ -4,6 +4,7 @@ use App\Http\Controllers\api\Aicontroller;
 use App\Http\Controllers\api\CommentsController;
 use App\Http\Controllers\api\EventsController;
 use App\Http\Controllers\api\LikesController;
+use App\Http\Controllers\api\ProfileController;
 use App\Http\Controllers\api\ProjectController;
 use App\Http\Controllers\api\SettingsController;
 use App\Http\Controllers\api\UserController;
@@ -107,3 +108,11 @@ Route::post('/deleteAccount',[SettingsController::class,'deleteAccount'])
 
 // ai routes 
 Route::post('/ai/chat',[AiController::class,'chat'])->name('ai chat');
+
+// profile management
+Route::middleware(['auth:sanctum'])->group(function () {
+ //create profile
+ Route::patch('/profile/update',[ProfileController::class,'update'])->name('update profile');
+ // view profile
+ Route::get('/user/{user}/profile',[ProfileController::class,'index'])->name('view profile');
+});
