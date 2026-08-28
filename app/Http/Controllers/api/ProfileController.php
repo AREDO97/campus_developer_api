@@ -46,4 +46,9 @@ class ProfileController extends Controller
     {
         return response($user->profile);
     }
+    // all profile data
+    public function allProfile()
+    {
+        
+    }
 }
