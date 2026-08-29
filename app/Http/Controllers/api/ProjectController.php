@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\AuditLog;
 use App\Models\Project;
+use App\Models\User;
+use App\Notifications\projectCreation;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -32,6 +34,14 @@ class ProjectController extends Controller
         'Project Upload',
         $user->name.' uploaded a new project'
     );
+
+    // send notification
+$admins=User::whereIn('role',['admin','super_admin'])->get();
+foreach($admins as $admin){
+    $admin->notify(
+        new projectCreation($user->name,$project->title)
+    );
+}
         // response
         return response()->json([
             'message'=>'Project created successifully',
