@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\Profile;
+use App\Notifications\newAccountCreation;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -52,6 +53,13 @@ AuditLog::Log(
         $user->name . ' created an account successfully'
     );
 
+// send notification
+$admins=User::whereIn('role',['admin','super_admin'])->get();
+foreach($admins as $admin){
+    $admin->notify(
+new newAccountCreation($user->name)
+    );
+}
 // response
     return response()->json([
         'message' => 'Account created successfully',

@@ -5,6 +5,7 @@ use App\Http\Controllers\api\AuditLogsController;
 use App\Http\Controllers\api\CommentsController;
 use App\Http\Controllers\api\EventsController;
 use App\Http\Controllers\api\LikesController;
+use App\Http\Controllers\api\NotificationController;
 use App\Http\Controllers\api\ProfileController;
 use App\Http\Controllers\api\ProjectController;
 use App\Http\Controllers\api\SettingsController;
@@ -127,4 +128,17 @@ Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 Route::delete('/log/{log}/delete',[AuditLogsController::class,'destroy'])->name('delete single log');
 // delete old logs
 Route::delete('/logs/delete',[AuditLogsController::class,'clearAll'])->name('delete old logs');
+});
+
+// notifications management
+Route::middleware(['auth:sanctum', 'role:admin,super_admin,user'])->group(function () {
+    // all user notifications
+  Route::get('/notifications', [NotificationController::class,'index'])
+  ->name('all notifications');
+  // mark notifications as read
+  Route::post('/notifications/markAsRead', [ NotificationController::class, 'markAllAsRead'])
+  ->name('marks as read');
+  // delete notifications
+  Route::delete('/notification/delete/{id}',[NotificationController::class,'destroy'])
+  ->name('delete notification');
 });
