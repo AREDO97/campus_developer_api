@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AUTH;
 use App\Models\User;
+use App\Models\AuditLog;
 use App\Http\Controllers\Controller;
 use App\Mail\WelcomeEmail;
 use Illuminate\Http\Request;
@@ -43,7 +44,15 @@ public function register(Request $request)
             'hobbies'=>null,
             'phone'=>"+256 760000000"
         ]);
-        // response
+
+// audit log
+AuditLog::Log(
+        $user->id,
+        'Account Creation',
+        $user->name . ' created an account successfully'
+    );
+
+// response
     return response()->json([
         'message' => 'Account created successfully',
         'user'    => $user,
@@ -90,6 +99,14 @@ if ($user->status !== 'active') {
     // 4. Generate plain text token
     $token = $user->createToken('auth-token')->plainTextToken;
 
+
+    // audit log
+    AuditLog::Log(
+        $user->id,
+        'Login into Account',
+        $user->name . ' logged into account successfully'
+    );
+    //response
     return response()->json([
         'token' => $token,
         'user'  => $user

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -17,12 +18,20 @@ class ProjectController extends Controller
             'url'=>'url'
         ]);
         // create 
+        $user=auth()->user();
         $project=Project::create([
-            'user_id'=>auth()->id(),
+            'user_id'=>$user->id,
             'title'=>$request->title,
             'description'=>$request->description,
             'url'=>$request->url
         ]);
+
+    // audit log
+    AuditLog::Log(
+        $user->id,
+        'Project Upload',
+        $user->name.' uploaded a new project'
+    );
         // response
         return response()->json([
             'message'=>'Project created successifully',
@@ -43,6 +52,13 @@ class ProjectController extends Controller
             'url'=>'url'
         ]);
 
+
+ // audit log
+    AuditLog::Log(
+        $user->id,
+        'Project Update',
+        $user->name.' updated his project'
+    );
         $project->update([
             'title'=>$request->title ?? $project->title,
             'description'=>$request->description ?? $project->description,

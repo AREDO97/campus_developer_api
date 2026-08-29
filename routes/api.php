@@ -30,13 +30,13 @@ Route::post('/users/update/{user}',[UserController::class,'update'])->name('upda
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
      // all users
     Route::get('/users',[UserController::class,'index'])->name('view users');
-    Route::post('/users/delete/{user}', [UserController::class, 'softDelete'])->name('suspend user');
-    Route::post('/users/create_admin/{user}', [UserController::class, 'makeAdmin'])->name('make admin');
-    Route::post('/users/demote_admin/{user}', [UserController::class, 'demoteAdmin'])->name('demote admin');
+    Route::patch('/users/suspend/{user}', [UserController::class, 'softDelete'])->name('suspend user');
+    Route::patch('/users/create_admin/{user}', [UserController::class, 'makeAdmin'])->name('make admin');
+    Route::patch('/users/demote_admin/{user}', [UserController::class, 'demoteAdmin'])->name('demote admin');
     //viewSuspended
     Route::get('/users/suspended', [UserController::class, 'viewSuspended'])->name('suspended users');
     // unsuspend user
-     Route::post('/user/unsuspend/{user}', [UserController::class, 'unsuspend'])->name('unsuspend user');
+     Route::patch('/users/unsuspend/{user}', [UserController::class, 'unsuspend'])->name('unsuspend user');
     
 });
 
@@ -62,7 +62,7 @@ Route::post('project/{project}/like',[LikesController::class,'create'])->name('l
 Route::get('/project/{project}/likes/count',[LikesController::class,'projectLikes'])->name('project likes');
 });
 
-// comment maanagement
+// comment management
 Route::middleware(['auth:sanctum'])->group(function () {
 // create comment
 Route::post('/project/{project}/comment',[CommentsController::class,'create'])->name('create comment');
@@ -81,7 +81,7 @@ Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function ()
 // create event
 Route::post('/event/create',[EventsController::class,'create'])->name('create event');
 // update event
-Route::patch('/event/{event}/update',[EventsController::class,'update'])->name('update event');
+Route::post('/event/{event}/update',[EventsController::class,'update'])->name('update event');
 // delete event
 Route::delete('/event/{event}/delete',[EventsController::class,'destroy'])->name('delete event');
 });
@@ -93,7 +93,7 @@ Route::get('/events',[EventsController::class,'index'])->name('view events');
 
 Route::middleware(['auth:sanctum'])->group(function () {
 // updatePassword
-Route::post('/password/update',[SettingsController::class,'updatePassword'])
+Route::patch('/password/update',[SettingsController::class,'updatePassword'])
 ->name('update password');
 
 // update username and email  updateUserInfo

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,6 +36,12 @@ class ProfileController extends Controller
             'hobbies'=>$request->hobbies ?? $profile->hobbies,
             'phone'=>$request->phone ?? $profile->phone
         ]);
+
+        // audit log
+        AuditLog::Log($user->id,
+        'Profile Update',
+        $user->name.' updated his profile'
+        );
         // response
         return response()->json([
             'message'=>'Profile updated successifully',

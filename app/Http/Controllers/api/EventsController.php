@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Event;
+use App\Models\AuditLog;
 use Illuminate\Http\Request;
 
 class EventsController extends Controller
@@ -28,6 +29,15 @@ class EventsController extends Controller
             'description'=>$request->description,
             'date'=>$request->date
         ]);
+
+  // Log out event
+    AuditLog::Log(
+        $request->user()->id,
+        'Event Creation',
+        $request->user()->name . ' created a new event titled ' . $request->title
+    );
+
+
         // response
         return response()->json([
             'message'=>'Event created successifully',
@@ -56,7 +66,12 @@ class EventsController extends Controller
             'description'=>$request->description ?? $event->description,
             'date'=>$request->date ?? $event->date,
         ]);
-
+// Log out event
+    AuditLog::Log(
+        $request->user()->id,
+        'Event Update',
+        $request->user()->name . ' updated an event titled ' . $request->title
+    );
          return response()->json([
             'message'=>'Event updated successifully',
             'event'=>$event
@@ -68,6 +83,13 @@ class EventsController extends Controller
         $event->update([
             'status'=>'deleted'
         ]);
+
+// log out event
+        AuditLog::Log(
+            auth()->user()->id,
+            'Event Deletion',
+            auth()->user()->name.' deleted an event titled '.$event->title
+        );
         // response 
         return response()->json([
             'message'=>'Event deleted successifully',

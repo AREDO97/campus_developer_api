@@ -44,6 +44,13 @@ public function softDelete(User $user)
     $user->save();
 
 
+// log out event
+       AuditLog::Log(
+    auth()->id(),
+    'User Suspension',
+    auth()->user()->name.' suspended '.$user->name
+);
+//response
     return [
         'message'=>'User suspended successifuuly',
         'user'=>$user
@@ -57,6 +64,12 @@ public function unsuspend(User $user)
         'status'=>'active'
     ]);
 
+// log out event
+       AuditLog::Log(
+     auth()->id(),
+    'User Unsuspension',
+    auth()->user()->name.' unsuspended '.$user->name
+);
 
     return response()->json([
         'message'=>'User unsuspend successiful',
@@ -82,6 +95,13 @@ public function makeAdmin(User $user)
     ]); 
     $role=$user->role;
      
+    // log out event
+        AuditLog::Log(
+            auth()->user()->id,
+            'Admin Creation',
+            auth()->user()->name.' made '.$user->name.' an admin'
+        );
+
     return [
         'message'=>'user role updated to admin',
         'role'=>$role
@@ -97,6 +117,15 @@ $user->update([
 
 
     $role=$user->role;
+
+    // log out event
+        AuditLog::Log(
+            auth()->user()->id,
+            'Admin Demotion',
+            auth()->user()->name.' demoted '.$user->name.' to a user'
+        );
+// response
+
     return [
         'message'=>'Admin demoted to normal user ',
         'role'=>$role
