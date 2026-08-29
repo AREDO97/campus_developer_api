@@ -120,7 +120,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // view logs
 Route::get('/logs',[AuditLogsController::class,'index'])
-->middleware(['auth:sanctum','role:admin,super_admin'])->name('view logs');
+->middleware(['auth:sanctum','role:admin,super_admin'])->name('all logs');
 // logs management
 Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
 // delete one log
