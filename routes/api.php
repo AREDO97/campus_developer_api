@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\Aicontroller;
+use App\Http\Controllers\api\AuditLogsController;
 use App\Http\Controllers\api\CommentsController;
 use App\Http\Controllers\api\EventsController;
 use App\Http\Controllers\api\LikesController;
@@ -115,4 +116,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
  Route::patch('/profile/update',[ProfileController::class,'update'])->name('update profile');
  // view profile
  Route::get('/user/{user}/profile',[ProfileController::class,'index'])->name('view profile');
+});
+
+// view logs
+Route::get('/logs',[AuditLogsController::class,'index'])
+->middleware(['auth:sanctum','role:admin,super_admin'])->name('view logs');
+// logs management
+Route::middleware(['auth:sanctum', 'role:super_admin'])->group(function () {
+// delete one log
+Route::delete('/log/{log}/delete',[AuditLogsController::class,'destroy'])->name('delete single log');
+// delete old logs
+Route::delete('/logs/delete',[AuditLogsController::class,'clearAll'])->name('delete old logs');
 });
