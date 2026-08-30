@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Project;
 use App\Models\Comment;
+use App\Notifications\commentedOnProject;
 
 class CommentsController extends Controller
 {
@@ -22,6 +23,15 @@ class CommentsController extends Controller
             'project_id'=>$project->id,
             'text'=>$request->text
         ]);
+
+        // notify user
+        if($user->id !== $project->user_id){
+        $projectOwner=$project->user;
+        $projectOwner->notify(
+            new commentedOnProject($user->name,$project->title)
+        );
+        }
+        
         // response
         return response()->json([
             'comment'=>$comment->text,

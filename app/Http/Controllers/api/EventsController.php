@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\AuditLog;
+use App\Models\User;
+use App\Notifications\eventCreation;
 use Illuminate\Http\Request;
 
 class EventsController extends Controller
@@ -30,6 +32,14 @@ class EventsController extends Controller
             'date'=>$request->date
         ]);
 
+
+  // notify all users
+  $users=User::where('id','!=',auth()->id())->get();
+  foreach($users as $user){
+    $user->notify(
+        new eventCreation($user->name,$event->title)
+    );
+  }
   // Log out event
     AuditLog::Log(
         $request->user()->id,

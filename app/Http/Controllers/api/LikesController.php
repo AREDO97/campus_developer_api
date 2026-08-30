@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Like;
 use App\Models\Project;
 use App\Models\User;
+use App\Notifications\likedProject;
 use Illuminate\Http\Request;
 
 class LikesController extends Controller
@@ -23,6 +24,16 @@ class LikesController extends Controller
             'user_id'=>$user->id,
             'project_id'=>$project->id
         ]);
+
+        // notify user
+        if ($project->user_id !== $user->id){
+          // project owner
+        $projectUser=$project->user;
+        $projectUser->notify(
+          new likedProject($user->name,$project->title)
+        );
+        }
+        // response
           return response()->json([
             'user'=>$user,
             'project'=>$project
