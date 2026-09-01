@@ -45,15 +45,14 @@ public function softDelete(User $user)
     $user->update([
         'status'=>'suspended'
     ]);
-    $user->save();
-
+    //$user->save();
 
 // log out event
-       AuditLog::Log(
-    auth()->id(),
-    'User Suspension',
-    auth()->user()->name.' suspended '.$user->name
-);
+    AuditLog::Log(
+        $admin->id,
+        'User Suspension',
+        $admin->name.' suspended user '.$user->name
+    );
 //response
     return [
         'message'=>'User suspended successifuuly',
