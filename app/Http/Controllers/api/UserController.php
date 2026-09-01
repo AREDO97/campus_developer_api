@@ -38,6 +38,10 @@ public function update(Request $request,User $user)
 // soft delete
 public function softDelete(User $user)
 {
+     $admin=auth()->user();
+    if($admin->role !== 'admin' && $admin->role !== 'super_admin'){
+        abort(403,'Unauthorised action');
+    }
     $user->update([
         'status'=>'suspended'
     ]);
@@ -60,6 +64,11 @@ public function softDelete(User $user)
 // unsuspend user
 public function unsuspend(User $user)
 {
+
+    $admin=auth()->user();
+    if($admin->role !== 'admin' && $admin->role !== 'super_admin'){
+        abort(403,'Unauthorised action');
+    }
     $user->update([
         'status'=>'active'
     ]);
@@ -89,7 +98,10 @@ public function viewSuspended()
 // change role to admin
 public function makeAdmin(User $user)
 {
-   
+    $admin=auth()->user();
+    if($admin->role !== 'admin' && $admin->role !== 'super_admin'){
+        abort(403,'Unauthorised action');
+    }
     $user->update([
         'role'=>'admin'
     ]); 
@@ -111,7 +123,11 @@ public function makeAdmin(User $user)
 
 public function demoteAdmin(User $user)
 {
-$user->update([
+     $admin=auth()->user();
+    if($admin->role !== 'admin' && $admin->role !== 'super_admin'){
+        abort(403,'Unauthorised');
+    }
+    $user->update([
         'role'=>'user'
     ]); 
 
