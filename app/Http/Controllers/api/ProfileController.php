@@ -16,8 +16,11 @@ class ProfileController extends Controller
         $user=auth()->user();
         $profile=$user->profile;
         $request->validate([
-          //  'profile_image'=>'image',
-            'course'=>'string'
+            'profile_image'=>'image',
+            'course'=>'string',
+            'year_of_study'=>'string',
+            'phone'=>'max:15',
+            'hobbies'=>'string'
         ]);
         // check 
         if($user->id !== $profile->user_id){
