@@ -40,7 +40,7 @@ public function register(Request $request)
  $profile=Profile::create([
             'user_id'=>$user->id,
             'course'=>"Computer Science",
-            'profile_image'=>"images/profile.webp",
+            'profile_image'=>"images/cart.png",
             'year_of_study'=>null,
             'hobbies'=>null,
             'phone'=>"+256 760000000"

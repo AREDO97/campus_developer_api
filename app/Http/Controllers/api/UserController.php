@@ -23,6 +23,10 @@ class UserController extends Controller
 // update user info mention
 public function update(Request $request,User $user)
 {
+    $allowedUser=$request->user();
+    if($allowedUser->id !== $user->id && $user->role !== "super_admin"){
+        abort(403,'Unauthorised action');
+    }
     //validation
     $request->validate([
         'name'=>'string|max:45',
