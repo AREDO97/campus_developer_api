@@ -27,7 +27,7 @@ Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctu
 // user management
 Route::get('/user/{user}',[UserController::class,'oneUser'])->name('view single user');
 // update
-Route::post('/users/update/{user}',[UserController::class,'update'])->name('update user info');
+Route::patch('/users/update/{user}',[UserController::class,'update'])->name('update user info');
 // admin delete and update role
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
      // all users

@@ -20,14 +20,20 @@ class UserController extends Controller
   {
     return response()->json($user);
   }
-// update user
+// update user info mention
 public function update(Request $request,User $user)
 {
+    //validation
+    $request->validate([
+        'name'=>'string|max:45',
+        'email'=>'email',
+        'phone'=>'string|max:15'
+    ]);
     $update=$user->update([
-        'name'=>$request->name,
-        'email'=>$request->email,
-        'role'=>$request->role,
-        'phone'=>$request->phone
+        'name'=>$request->name ?? $user->name,
+        'email'=>$request->email ?? $user->email,
+        'role'=>$request->role ?? $user->role,
+        'phone'=>$request->phone ?? $user->phone
     ]);
 
     return [
