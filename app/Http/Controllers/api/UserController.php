@@ -90,7 +90,7 @@ public function unsuspend(User $user)
 // view suspended users
 public function viewSuspended()
 {
-    $suspended=User::where('status','suspended')->lates();
+    $suspended=User::where('status','suspended')->latest()->get();
     return response()->json($suspended);
 }
 
