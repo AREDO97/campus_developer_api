@@ -1,6 +1,6 @@
 FROM php:8.3-apache
 
-# Install system dependencies & required libraries for PHP extensions
+# Install system dependencies & required libraries for PHP extensions (including PostgreSQL libpq-dev)
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -9,10 +9,11 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
+    libpq-dev \
     zip \
     curl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    && docker-php-ext-install pdo_mysql pdo_pgsql pgsql mbstring exif pcntl bcmath gd
 
 # Enable Apache mod_rewrite for Laravel routing
 RUN a2enmod rewrite
