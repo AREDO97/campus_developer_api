@@ -8,6 +8,7 @@ use Override;
 class Profile extends Model
 {
     //
+
     protected $fillable = [
         'profile_image',
         'user_id',

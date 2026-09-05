@@ -25,13 +25,17 @@ Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctu
 ->name('logout');
 
 // user management
-Route::get('/user/{user}',[UserController::class,'oneUser'])->name('view single user');
+// all users
+Route::get('/users',[UserController::class,'index'])
+->middleware('auth:sanctum')->name('view users');
+Route::get('/user/{user}',[UserController::class,'oneUser'])
+->middleware('auth:sanctum')->name('view single user');
 // update
-Route::patch('/users/update/{user}',[UserController::class,'update'])->name('update user info');
-// admin delete and update role
+Route::patch('/users/update/{user}',[UserController::class,'update'])
+->middleware('auth:sanctum')->name('update user info');
+// only admin delete and update role
 Route::middleware(['auth:sanctum', 'role:admin,super_admin'])->group(function () {
-     // all users
-    Route::get('/users',[UserController::class,'index'])->name('view users');
+    // view suspended
     Route::patch('/users/suspend/{user}', [UserController::class, 'softDelete'])->name('suspend user');
     Route::patch('/users/create_admin/{user}', [UserController::class, 'makeAdmin'])->name('make admin');
     Route::patch('/users/demote_admin/{user}', [UserController::class, 'demoteAdmin'])->name('demote admin');
