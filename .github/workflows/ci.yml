@@ -24,7 +24,7 @@ jobs:
 
       - name: Prepare Laravel environment
         run: |
-          cp .env.example .env
+          cp .env.testing .env
           php artisan key:generate
 
       - name: Prepare SQLite database
