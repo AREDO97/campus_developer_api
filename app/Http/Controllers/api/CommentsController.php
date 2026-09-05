@@ -14,7 +14,7 @@ class CommentsController extends Controller
     public function create(Project $project,Request $request)
     {
         // validate comment
-        $user=auth()->user();
+        $user=$request->user();
         $request->validate([
             'text'=>'required|max:100'
         ]);
@@ -37,7 +37,7 @@ class CommentsController extends Controller
             'comment'=>$comment->text,
             'user'=>$user,
             'project'=>$project
-        ]);
+        ],201);
     }
     // project comments
     public function projectComments(Project $project)
@@ -71,9 +71,9 @@ class CommentsController extends Controller
         ]);
     }
     // delete comment
-    public function destroy(Comment $comment)
+    public function destroy(Request $request,Comment $comment)
     {
-        $user=auth()->user();
+        $user=$request->user();
         if($comment->user->id !== $user->id){
             abort(403,'Unauthorised action');
         }

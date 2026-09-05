@@ -37,7 +37,7 @@ class LikesController extends Controller
           return response()->json([
             'user'=>$user,
             'project'=>$project
-          ]);
+          ],201);
 
        }
        
