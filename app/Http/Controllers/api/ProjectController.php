@@ -46,7 +46,7 @@ foreach($admins as $admin){
         return response()->json([
             'message'=>'Project created successifully',
             'project'=>$project
-        ]);
+        ],201);
     }
 
     // update project
