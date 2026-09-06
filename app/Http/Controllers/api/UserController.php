@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\AuditLog;
+use App\Models\Project;
+use Dom\Comment;
 
 class UserController extends Controller
 {
@@ -157,5 +159,15 @@ public function demoteAdmin(User $user)
     ];
 }
 
-
+// user activity
+    public function userActivity(Request $request)
+    {
+        $user=$request->user();
+        $logs=$user->logs;
+        // response
+        return response()->json([
+            'user'=>$user,
+            'logs'=>$logs
+        ]);
+    }
 }

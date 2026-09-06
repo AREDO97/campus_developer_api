@@ -28,6 +28,8 @@ Route::post('/logout',[AuthController::class,'logout'])->middleware('auth:sanctu
 // all users
 Route::get('/users',[UserController::class,'index'])
 ->middleware('auth:sanctum')->name('view users');
+Route::get('/userActivity',[UserController::class,'userActivity'])
+->middleware('auth:sanctum')->name('user activity');
 Route::get('/user/{user}',[UserController::class,'oneUser'])
 ->middleware('auth:sanctum')->name('view single user');
 // update
