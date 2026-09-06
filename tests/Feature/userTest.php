@@ -109,3 +109,14 @@ test('admins can unsuspend users', function () {
     $response->assertStatus(200);
 });
 
+// user logs
+test('user can view recent activity', function () {
+    // create admin
+    $user = User::factory()->create();
+    // logged in user
+    Sanctum::actingAs($user);
+    // register user
+    $response = $this->getJson('/api/userActivity');
+
+    $response->assertStatus(200);
+});
