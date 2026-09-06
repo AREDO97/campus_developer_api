@@ -35,7 +35,7 @@ test('users can like projects', function () {
 });
 
 // project likes
-test(' project lies', function () {
+test(' project likes', function () {
     // create admin
     $user = User::factory()->create([
         'role' => 'admin',
@@ -50,3 +50,4 @@ test(' project lies', function () {
 
     $response->assertStatus(200);
 });
+

@@ -14,6 +14,13 @@ class EventsController extends Controller
     // create event
     public function create(Request $request)
     {
+        // enforce admins
+          $admin=$request->user();
+        if($admin->role !== 'admin' && $admin->role !== 'super_admin')
+            {
+                abort(403,'Unauthorised action');
+            }
+            // validation
         $request->validate([
             'title'=>'required',
             'description'=>'max:100',
@@ -26,7 +33,7 @@ class EventsController extends Controller
         }
         $event=Event::create([
             'title'=>$request->title,
-            'user_id'=>auth()->id(),
+            'user_id'=>$admin->id,
             'image'=>$path,
             'description'=>$request->description,
             'date'=>$request->date
@@ -52,11 +59,18 @@ class EventsController extends Controller
         return response()->json([
             'message'=>'Event created successifully',
             'event'=>$event
-        ]);
+        ],201);
     }
     // update events
     public function update(Request $request, Event $event)
     {
+         // enforce admins
+          $admin=$request->user();
+        if($admin->role !== 'admin' && $admin->role !== 'super_admin')
+            {
+                abort(403,'Unauthorised action');
+            }
+            // validation
          $request->validate([
             'title'=>'max:100',
             'description'=>'max:100',
@@ -88,17 +102,23 @@ class EventsController extends Controller
         ]);
     }
     // delete events
-    public function destroy(Event $event)
+    public function destroy(Request $request,Event $event)
     {
+         // enforce admins
+          $admin=$request->user();
+        if($admin->role !== 'admin' && $admin->role !== 'super_admin')
+            {
+                abort(403,'Unauthorised action');
+            }
         $event->update([
             'status'=>'deleted'
         ]);
 
 // log out event
         AuditLog::Log(
-            auth()->user()->id,
+            $admin->id,
             'Event Deletion',
-            auth()->user()->name.' deleted an event titled '.$event->title
+            $admin->name.' deleted an event titled '.$event->title
         );
         // response 
         return response()->json([
