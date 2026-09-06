@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,10 @@ class EventFactory extends Factory
     {
         return [
             //
+            'user_id'=>User::factory()->create(),
+            'title'=>fake()->paragraph(),
+            'description'=>fake()->streetName(),
+            'image'=>fake()->image()
         ];
     }
 }

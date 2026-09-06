@@ -93,7 +93,8 @@ Route::delete('/event/{event}/delete',[EventsController::class,'destroy'])->name
 });
 
 // view upcoming events
-Route::get('/events',[EventsController::class,'index'])->name('view events');
+Route::get('/events',[EventsController::class,'index'])
+->name('view events');
 
 // settings controller
 
