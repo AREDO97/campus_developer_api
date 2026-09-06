@@ -18,7 +18,7 @@ class SettingsController extends Controller
             'current_password'=>'required',
             'password'=>'required|confirmed'
         ]);
-        $user=auth()->user();
+        $user=$request->user();
         if(! Hash::check($request->current_password,$user->password))
             {
                 return response()->json([
@@ -45,15 +45,15 @@ class SettingsController extends Controller
     public function updateUserInfo(Request $request)
     {
         $request->validate([
-    'email' => 'email|unique:users,email,' . auth()->id(),
-    'name' => 'string',
- ]);
-        $user=auth()->user();
+        'email' => 'email|unique:users,email,' . auth()->id(),
+        'name' => 'string',
+            ]);
+        $user=$request->user();
         $user->update([
             'name'=>$request->name ?? $user->name,
             'email'=>$request->email ?? $user->email
         ]);
-
+            // response
         return response()->json([
             'message'=>'Personal information updated',
             'new_name'=>$user->name,
@@ -63,7 +63,11 @@ class SettingsController extends Controller
     // delete account
     public function deleteAccount(Request $request)
     {
-        $user=auth()->user();
+        $user=$request->user();
+        //validation
+        $request->validate([
+            'password'=>'required'
+        ]);
         if(! Hash::check($request->password,$user->password))
             {
             return response()->json([
@@ -91,9 +95,5 @@ class SettingsController extends Controller
             'message'=>'Account deleted succesifully'
         ]);
     }
-    // up
-    public function upcoming()
-    {
-        return "hello";
-    }
+   
 }
